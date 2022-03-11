@@ -1,0 +1,215 @@
+from tkinter import *
+import tkinter as tk
+from PIL import ImageTk,Image
+from tkinter import ttk
+import matplotlib.pyplot as plt
+import numpy as np
+import pymysql
+
+import pandas as pd
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+#df=pd.read_csv(C:/Users/User/PycharmProjects/tkinter/mungesat.xlsx)
+
+root=Tk()
+root.title("Student Management System")
+root.iconbitmap('C:/Users/User/PycharmProjects/tkinter/Ampeross.ico')
+
+title=Label(root,bg='azure',text="Student Management System" ,relief=GROOVE, font=("Arial", 30),border=4).pack(side=TOP,fill=X)
+
+#img = PhotoImage( file = "math.jpg")
+
+
+frame1=LabelFrame(root,text="Manage Student",padx=5,pady=5,border=4)
+frame1.place(x=15,y=65,width=465,heigh=650)
+
+frame2=LabelFrame(root,text="Pasqyra pershkruese",padx=5,pady=5,border=4)
+frame2.place(x=490,y=65,width=900,heigh=650)
+
+#frame3=LabelFrame(root,text="Pasqyra induktive",padx=5,pady=5,border=4)
+#frame3.place(x=1000,y=65,width=500,heigh=650)
+
+frame11=LabelFrame(frame1,padx=5,pady=5,border=4,)
+frame11.place(x=0,y=450,width=440,heigh=70)
+
+#frame12=LabelFrame(frame1,padx=5,pady=5,border=4,)
+#frame12.place(x=0,y=330,width=440,heigh=280)
+
+frame21=LabelFrame(frame2,padx=5,pady=5,border=4,)
+frame21.place(x=0,y=55,width=880,heigh=560)
+
+title=Label(frame21,text="Lista e nx te cilet mungojne" , font=("Arial", 12)).pack(side=TOP,fill=X)
+#=========================variablat hyrese
+mesimdhenesi=tk.StringVar()
+emri=tk.StringVar()
+ora=tk.StringVar()
+klasa=tk.StringVar()
+mungesat=tk.StringVar()
+lenda=tk.StringVar()
+
+
+#=========================
+ms_lb=Label(frame1,text="Mesimdh...",font=("Arial", 15))
+ms_lb.grid(row=0,column=0,padx=0,pady=2)
+
+ms_en=Entry(frame1,width=19,font=("Arial", 15),border=5,textvariable=mesimdhenesi)
+ms_en.grid(row=0,column=1,padx=0,pady=10)
+#=========================
+lenda_lb=Label(frame1,text="Lenda",font=("Arial", 15))
+lenda_lb.grid(row=1,column=0,padx=2,pady=2)
+
+lenda_en=ttk.Combobox(frame1,width=19,state= "readonly",values=('Matematike','GJ.Shqipe','Fizike','Kimi','TIK','Python'),textvariable=lenda)
+lenda_en.grid(row=1,column=1,padx=0,pady=10)
+#=========================
+emri_lb=Label(frame1,text="Emri",font=("Arial", 15))
+emri_lb.grid(row=2,column=0,padx=0,pady=2)
+
+emri_en=Entry(frame1,width=19,font=("Arial", 15),border=5,textvariable=emri)
+emri_en.grid(row=2,column=1,padx=10,pady=10)
+#=========================
+klasa_lb=Label(frame1,text="Paralel",font=("Arial", 15))
+klasa_lb.grid(row=3,column=0,padx=22,pady=2)
+
+nr_class_co=ttk.Combobox(frame1,width=19,state= "readonly",values=('XI1','XI2','XI3','XI4','XI10','XL11'),textvariable=klasa)
+nr_class_co.grid(row=3,column=1,padx=22,pady=2)
+#=========================
+ora_lb=Label(frame1,widt=14,text="Ora",font=("Arial", 15))
+ora_lb.grid(row=4,column=0,padx=20,pady=10)
+
+ora_co=ttk.Combobox(frame1,width=19,values=('ora 1','ora 2','ora 3','ora 4','ora 5','ora 6'),textvariable=ora)
+ora_co.grid(row=4,column=1,padx=20,pady=10)
+#=========================
+mungesa_lb=Label(frame1,widt=14,text="Mungesa",font=("Arial", 15))
+mungesa_lb.grid(row=5,column=0,padx=20,pady=10)
+
+mungesa_co=ttk.Combobox(frame1,width=19,values=('Me Arsye','Pa Arsye'),textvariable=mungesat)
+mungesa_co.grid(row=5,column=1,padx=20,pady=10)
+#=========================
+shto_bt=Button(frame11,widt=8,heigh=2,text="Shtoni",font=("Arial", 9))
+shto_bt.grid(row=0,column=0,padx=10,pady=10)
+#=========================
+permiso_bt=Button(frame11,widt=8,heigh=2,text="Permiso",font=("Arial", 9))
+permiso_bt.grid(row=0,column=1,padx=15,pady=10)
+#=========================
+fshij_bt=Button(frame11,widt=8,heigh=2,text="Fshij",font=("Arial", 9))
+fshij_bt.grid(row=0,column=2,padx=15,pady=10)
+#=========================
+ruaj_bt=Button(frame11,widt=8,heigh=2,text="Ruaj",font=("Arial", 9))
+ruaj_bt.grid(row=0,column=3,padx=15,pady=10)
+#=========================
+search_lb=Label(frame2,text="Kerkoni sipas",font=("Arial", 15))
+search_lb.grid(row=0,column=0,padx=0,pady=2)
+#=========================
+search_co=ttk.Combobox(frame2,width=35,heigh=4,values=('Emrit','Klases','Lendes','ores'))
+search_co.grid(row=0,column=1,padx=20,pady=20)
+#=========================
+search_en=Entry(frame2,widt=19,font=("Arial", 12),border=2)
+search_en.grid(row=0,column=2,padx=10,pady=10)
+#=========================
+search_bt=Button(frame2,widt=8,heigh=1,text="Kerko",font=("Arial", 10))
+search_bt.grid(row=0,column=3,padx=10,pady=10)
+#========================= funksionet
+def fetch_date():
+    conn = pymysql.connect(host='localhost',user='mesimdhenesi',password='',database="sms1")
+    curr=conn.cursor()
+    curr.execute("SELECT * FROM data")
+    rows =curr.fetchall()
+    if len(rows)!=0:
+        student_table.delete(student_table.get_children())
+        for row in rows:
+            student_table.insert('',tk.END,values=row)
+        conn.commit()
+    conn.close()
+'''
+def add_func():
+    if mesimdhenesi.get()=="" or emri.get()="":
+        messagebox.showerror("error")
+    else:
+        conn = pymysql.connect((host='localhost',user='mesimdhenesi',password="",database="sms1")
+        curr = conn.cursor()
+        curr.execute("INSET INTO data values(%s,%s,%s,%s,%s,%s)")
+'''
+
+
+#=========================
+data = {'Me arsye': 320, 'Pa arsye': 150}
+courses = list(data.keys())
+values = list(data.values())
+
+def graph1():
+    barWidth = 0.25
+    fig = plt.subplots(figsize=(10, 6))
+
+    # set height of bar
+    IT = [120, 100, 90, 88, 112]
+    ECE = [280, 166, 168, 205, 210]
+
+    # Set position of bar on X axis
+    br1 = np.arange(len(IT))
+    br2 = [x + barWidth for x in br1]
+
+    # Make the plot
+    plt.bar(br1, IT, color='r', width=barWidth,
+            edgecolor='blue', label='Me Arsye')
+    plt.bar(br2, ECE, color='g', width=barWidth,
+            edgecolor='blue', label='Pa Arsye')
+
+    # Adding Xticks
+    plt.title("Paraqitja e totale e mungesave" ,fontweight='bold', fontsize=20)
+    plt.xlabel('Klasa', fontweight='bold', fontsize=15)
+    plt.ylabel('No. i mungesave', fontweight='bold', fontsize=15)
+    plt.xticks([r + barWidth for r in range(len(IT))],
+               ['XI1', 'XI2', 'XI3', 'XI4', 'XI5'])
+
+    plt.legend()
+    plt.show()
+
+def graph2():
+    days = ["Hen", "Mart", "Mer", "Enj", 'Pre']
+    company1 = [4, 4, 3, 8, 3]  # sales of company1
+    company2 = [1, 2, 3, 4, 2]  # sales of company 2
+    plt.figure(figsize=(10, 6))
+    plt.plot(days, company1, label="Me Arsye")  # line chart company 1
+    plt.plot(days, company2, label="Pa Arsye")  # line chart company 2
+    plt.xlabel("Days")
+    plt.ylabel("No. i mungesave")
+    plt.legend()  # using legend to differentiate the graphs of companies
+    plt.title("Paraqitja e javore e mungesave")
+    plt.show()
+
+
+graph_bt=Button(frame2,widt=8,heigh=1,text="Graph",font=("Arial", 10),command=graph1)
+graph_bt.grid(row=0,column=4,padx=10,pady=10)
+
+
+#=========================
+my_tree=ttk.Treeview(frame21,heigh=200,columns=('ID','Data','Emri','Ora',"Klasa","Lenda",'Mungesa'))
+
+
+my_tree.column('#0', width=0, stretch=NO)
+my_tree.column('ID',anchor=W,width=60)
+my_tree.column('Data',anchor=W,width=130)
+my_tree.column('Emri',anchor=W,width=150)
+my_tree.column('Ora',anchor=W,width=100)
+my_tree.column('Klasa',anchor=W,width=100)
+my_tree.column('Lenda',anchor=W,width=150)
+my_tree.column('Mungesa',anchor=W,width=150)
+
+my_tree.heading('#0', text='', anchor=CENTER)
+my_tree.heading('ID', text='ID', anchor=CENTER)
+my_tree.heading('Data', text='Data', anchor=CENTER)
+my_tree.heading('Emri', text='Emri', anchor=CENTER)
+my_tree.heading('Ora', text='Ora', anchor=CENTER)
+my_tree.heading('Klasa', text='Klasa', anchor=CENTER)
+my_tree.heading('Lenda', text='Lenda', anchor=CENTER)
+my_tree.heading('Mungesa', text='mungesa', anchor=CENTER)
+
+#my_tree.insert(parent='', index=0, iid=0, text='', values=('1','01/02/2022','arbnor hetemi','ora2','XI1','matematike','pa arsye'))
+#my_tree.insert(parent='', index=0, iid=0, text='', values=('2','05/02/2022','astrit vuthaj','ora6','XI4','matematike','pa arsye'))
+my_tree.pack()
+
+
+#fetch_date()
+
+root.geometry("1400x700+300+100")
+root.configure(bg='#49A')
+root.mainloop()
